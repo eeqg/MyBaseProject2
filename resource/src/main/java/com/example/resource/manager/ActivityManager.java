@@ -11,6 +11,8 @@ import java.util.Stack;
  */
 public class ActivityManager {
 	
+	private final String TAG = ActivityManager.class.getSimpleName();
+	
 	private static Stack<Activity> activityStack;
 	private static ActivityManager instance;
 	
@@ -35,7 +37,7 @@ public class ActivityManager {
 			activityStack = new Stack<>();
 		}
 		activityStack.add(activity);
-		Log.i("TAG", "ActivityManager添加了：" + activity.getClass().getName());
+		Log.i(TAG, "ActivityManager添加了：" + activity.getClass().getName());
 	}
 	
 	/**
@@ -58,7 +60,7 @@ public class ActivityManager {
 	public void removeActivity(Activity activity) {
 		if (activity != null) {
 			activityStack.remove(activity);
-			Log.i("TAG", "ActivityManager移除了：" + activity.getClass().getName());
+			Log.i(TAG, "ActivityManager移除了：" + activity.getClass().getName());
 		}
 	}
 	
@@ -69,7 +71,7 @@ public class ActivityManager {
 		if (activity != null) {
 			activityStack.remove(activity);
 			activity.finish();
-			Log.i("TAG", "ActivityManager关闭了：" + activity.getClass().getName());
+			Log.i(TAG, "ActivityManager关闭了：" + activity.getClass().getName());
 		}
 	}
 	
@@ -103,7 +105,7 @@ public class ActivityManager {
 	/**
 	 * 退出应用程序
 	 */
-	public void AppExit(Context context) {
+	public void exitApp(Context context) {
 		try {
 			finishAllActivity();
 			android.app.ActivityManager activityMgr = (android.app.ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
