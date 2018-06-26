@@ -1,8 +1,7 @@
 package com.example.resource.network;
 
-import android.util.Log;
-
 import com.example.resource.base.BaseApp;
+import com.example.resource.utils.LogUtils;
 import com.example.resource.utils.NetworkUtils;
 
 import java.io.File;
@@ -93,17 +92,28 @@ public class ServiceFactory {
 		@Override
 		public Response intercept(Chain chain) throws IOException {
 			Request request = chain.request();
-			if (!NetworkUtils.isConnected(BaseApp.INSTANCE)) {
+			boolean isNetworkAvailable = NetworkUtils.isConnected(BaseApp.INSTANCE);
+			LogUtils.i(TAG, "CachesInterceptor -- isNetworkAvailable : "+ isNetworkAvailable);
+			if (!isNetworkAvailable) {
 				request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
 			}
-			chain.proceed(request);
-			if (NetworkUtils.isConnected(BaseApp.INSTANCE)) {
-			
+			Response response = chain.proceed(request);
+			if (isNetworkAvailable) {
+				int maxAge = 0; // 有网络时 设置缓存超时时间0
+				request.newBuilder()
+						.header("Cache-Control", "public, max-age=" + maxAge)
+						.removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+						.build();
 			} else {
-			
+				int maxStale = 60 * 60 * 24 * 28; // 无网络时，设置超时为4周
+				response.newBuilder()
+						.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+						.removeHeader("Pragma")
+						.build();
 			}
 			
-			return null;
+			LogUtils.d(TAG, "response : "+response);
+			return response;
 		}
 	}
 	
@@ -112,10 +122,10 @@ public class ServiceFactory {
 		public Response intercept(Chain chain) throws IOException {
 			Request request = chain.request();
 			long t1 = System.nanoTime();
-			Log.i(TAG, String.format("Sending request %s on %s%n%s", request.url(), chain.connection(), request.headers()));
+			LogUtils.i(TAG, String.format("Sending request %s on %s%n%s", request.url(), chain.connection(), request.headers()));
 			Response response = chain.proceed(request);
 			long t2 = System.nanoTime();
-			Log.i(TAG, String.format("Received response for %s in %.1fms%n%s", response.request().url(), (t2 - t1) / 1e6d, response.headers()));
+			LogUtils.i(TAG, String.format("Received response for %s in %.1fms%n%s", response.request().url(), (t2 - t1) / 1e6d, response.headers()));
 			return response;
 		}
 	};
