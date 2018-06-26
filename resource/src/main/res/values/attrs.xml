@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- 标注 -->
+	<attr name="colorThemeAccent" format="color"/>
+	<!-- 主级 -->
+	<attr name="colorThemePrimary" format="color"/>
+	<!-- 辅助 -->
+	<attr name="colorThemeAssisted" format="color"/>
+	<!-- 分割线 -->
+	<attr name="colorThemeDivider" format="color"/>
+	
+	<!-- 标注 -->
+	<attr name="colorTextAccent" format="color"/>
+	<!-- 主级 -->
+	<attr name="colorTextPrimary" format="color"/>
+	<!-- 次级 -->
+	<attr name="colorTextSecondary" format="color"/>
+	<!-- 辅助 -->
+	<attr name="colorTextAssisted" format="color"/>
+	
+	<attr name="toolbarBackground" format="color"/>
+	<attr name="toolbarTitleTextColor" format="color"/>
+	<attr name="toolbarTitleTextSize" format="color"/>
+	<attr name="toolbarBackImage" format="reference"/>
+	<attr name="toolbarActionTextColor" format="color"/>
+	<attr name="toolbarActionTextSize" format="dimension"/>
+</resources>

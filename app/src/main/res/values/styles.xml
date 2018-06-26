@@ -1,11 +1,21 @@
 <resources>
-
-	<!-- Base application theme. -->
-	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="AppTheme" parent="AppBaseTheme">
 		<!-- Customize your theme here. -->
-		<item name="colorPrimary">@color/colorPrimary</item>
-		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-		<item name="colorAccent">@color/colorAccent</item>
+		<item name="toolbarBackground">@color/colorPrimary</item>
+		<item name="toolbarTitleTextColor">@android:color/white</item>
+		<item name="toolbarTitleTextSize">@dimen/dimenTextAccent</item>
+		<item name="toolbarBackImage">@mipmap/ic_back_white</item>
+		<item name="toolbarActionTextColor">@color/colorTextAccent</item>
+		<item name="toolbarActionTextSize">@dimen/dimenTextPrimary</item>
+		<item name="colorThemeAccent">@color/colorThemeAccent</item>
+		<item name="colorThemePrimary">@color/colorThemePrimary</item>
+		<item name="colorThemeAssisted">@color/colorThemeAssisted</item>
+		<item name="colorThemeDivider">@color/colorThemeDivider</item>
+		<item name="colorTextAccent">@color/colorTextAccent</item>
+		<item name="colorTextPrimary">@color/colorTextPrimary</item>
+		<item name="colorTextSecondary">@color/colorTextSecondary</item>
+		<item name="colorTextAssisted">@color/colorTextAssisted</item>
+		<item name="actionBarSize">40dp</item>
 	</style>
 
 </resources>
