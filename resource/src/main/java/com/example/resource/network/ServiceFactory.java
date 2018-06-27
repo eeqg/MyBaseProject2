@@ -25,6 +25,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceFactory {
 	private static final String TAG = "ServiceFactory";
 	private static final int DEFAULT_CACHE_SIZE = 1024 * 1024 * 10;
+	private static final int DEFAULT_TIME_HOUR = 60 * 60;
+	private static final int DEFAULT_TIME_DAY = DEFAULT_TIME_HOUR * 24;
+	private static final int DEFAULT_TIME_WEEK = DEFAULT_TIME_DAY * 24 * 7;
 	
 	private volatile static Retrofit retrofit;
 	private volatile static OkHttpClient okHttpClient;
@@ -56,7 +59,9 @@ public class ServiceFactory {
 					File cacheFile = new File(BaseApp.INSTANCE.getCacheDir(), "responses");
 					Cache cache = new Cache(cacheFile, DEFAULT_CACHE_SIZE);
 					okHttpClient = new OkHttpClient.Builder()
-							.addInterceptor(new CachesInterceptor())
+							// .addInterceptor(new CachesInterceptor())
+							.addInterceptor(requestInterceptor)
+							.addNetworkInterceptor(responseInterceptor)
 							.addInterceptor(LogInterceptor)
 							.connectTimeout(30, TimeUnit.SECONDS)
 							.cache(cache)
@@ -93,7 +98,7 @@ public class ServiceFactory {
 		public Response intercept(Chain chain) throws IOException {
 			Request request = chain.request();
 			boolean isNetworkAvailable = NetworkUtils.isConnected(BaseApp.INSTANCE);
-			LogUtils.i(TAG, "CachesInterceptor -- isNetworkAvailable : "+ isNetworkAvailable);
+			LogUtils.i(TAG, "CachesInterceptor -- isNetworkAvailable : " + isNetworkAvailable);
 			if (!isNetworkAvailable) {
 				request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
 			}
@@ -105,17 +110,66 @@ public class ServiceFactory {
 						.header("Cache-Control", "public, max-age=" + maxAge)
 						.build();
 			} else {
-				int maxStale = 60 * 60 * 24 * 28; // 无网络时，设置超时为4周
+				int maxStale = DEFAULT_TIME_WEEK * 28; // 无网络时，设置超时为4周
 				response.newBuilder()
 						.removeHeader("Pragma")
 						.header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
 						.build();
 			}
 			
-			LogUtils.d(TAG, "response : "+response);
+			LogUtils.d(TAG, "response : " + response);
 			return response;
 		}
 	}
+	
+	private static final Interceptor requestInterceptor = new Interceptor() {
+		@Override
+		public Response intercept(Chain chain) throws IOException {
+			boolean isNetworkAvailable = NetworkUtils.isConnected(BaseApp.INSTANCE);
+			Request request = chain.request();
+			
+			LogUtils.d(TAG, "requestInterceptor -- isNetworkAvailable : " + isNetworkAvailable);
+			if (!isNetworkAvailable) {
+				BaseApp.toast("請檢查網絡!!");
+				
+				CacheControl tempCacheControl = new CacheControl.Builder()
+						// .onlyIfCached()
+						.maxStale(DEFAULT_TIME_DAY, TimeUnit.SECONDS)
+						.build();
+				request = request.newBuilder()
+						.cacheControl(tempCacheControl)
+						.build();
+			} else {
+				// 强制走网络
+				request = request.newBuilder().cacheControl(CacheControl.FORCE_NETWORK).build();
+			}
+			
+			return chain.proceed(request);
+		}
+	};
+	
+	private static final Interceptor responseInterceptor = new Interceptor() {
+		@Override
+		public Response intercept(Chain chain) throws IOException {
+			//针对那些服务器不支持缓存策略的情况下，使用强制修改响应头，达到缓存的效果
+			//响应拦截只不过是出于规范，向服务器发出请求，至于服务器搭不搭理我们我们不管他，我们在响应里面做手脚，有网没有情况下的缓存策略
+			Request request = chain.request();
+			Response originalResponse = chain.proceed(request);
+			int maxAge;
+			// 缓存的数据
+			LogUtils.d(TAG, "responseInterceptor--isNetworkAvailable : " + NetworkUtils.isConnected(BaseApp.INSTANCE));
+			if (!NetworkUtils.isConnected(BaseApp.INSTANCE)) {
+				maxAge = DEFAULT_TIME_WEEK * 7;
+			} else {
+				maxAge = 0;//有网络, 请求数据.
+			}
+			return originalResponse.newBuilder()
+					.removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+					.removeHeader("Cache-Control")
+					.header("Cache-Control", "public, max-age=" + maxAge)
+					.build();
+		}
+	};
 	
 	private static final Interceptor LogInterceptor = new Interceptor() {
 		@Override
