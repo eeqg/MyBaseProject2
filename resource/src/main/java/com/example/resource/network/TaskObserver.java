@@ -4,6 +4,7 @@ import com.example.resource.R;
 import com.example.resource.base.BaseApp;
 import com.example.resource.base.BaseBean;
 import com.example.resource.base.BaseContract;
+import com.example.resource.utils.LogUtils;
 
 import java.lang.ref.SoftReference;
 
@@ -11,7 +12,7 @@ import java.lang.ref.SoftReference;
  * Created by wp on 2018/6/27.
  */
 
-public abstract class TaskObserver<T extends BaseBean> extends AbstractObserver<T> {
+public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObserver<T> {
 	private SoftReference<BaseContract.View> basicViewReference;
 	
 	protected TaskObserver(BaseContract.View basicView) {
@@ -20,6 +21,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractObserver<
 	
 	@Override
 	public void taskStart() {
+		LogUtils.d("TaskObserver", "taskStart()--");
 		BaseContract.View basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.showLoading();

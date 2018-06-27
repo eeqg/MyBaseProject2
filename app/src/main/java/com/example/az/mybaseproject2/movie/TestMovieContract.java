@@ -15,6 +15,6 @@ interface TestMovieContract {
 	}
 	
 	interface Presenter extends BaseContract.Presenter {
-		void listMovie(int start, int count);
+		Disposable listMovie(int start, int count);
 	}
 }

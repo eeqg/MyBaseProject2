@@ -22,7 +22,7 @@ public interface BaseContract {
 		
 		void detach();
 		
-		void addDisposable(Disposable subscription);
+		void addDisposable(Disposable disposable);
 		
 		void unDisposable();
 	}

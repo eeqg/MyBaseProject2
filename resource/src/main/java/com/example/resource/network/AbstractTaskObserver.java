@@ -3,25 +3,23 @@ package com.example.resource.network;
 import com.example.resource.base.BaseBean;
 import com.example.resource.utils.LogUtils;
 
-import org.reactivestreams.Subscription;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 
 /**
  * Created by wp on 2018/6/27.
  */
 
-public abstract class AbstractObserver<T extends BaseBean> implements Observer<T> {
+public abstract class AbstractTaskObserver<T extends BaseBean> extends DisposableObserver<T> {
 	@Override
-	public void onSubscribe(Disposable d) {
-		LogUtils.d("AbstractTaskSubscriber", "onSubscribe()");
+	public final void onStart() {
+		super.onStart();
+		LogUtils.d("AbstractTaskSubscriber", "onStart()--");
 		taskStart();
 	}
 	
 	@Override
-	public void onNext(T baseBean) {
-		LogUtils.d("AbstractTaskSubscriber", "onNext()");
+	public final void onNext(T baseBean) {
+		LogUtils.d("AbstractTaskSubscriber", "onNext()--statusInfo.statusCode : "+baseBean.statusInfo.statusCode);
 		if (baseBean.statusInfo.isSuccessful()) {
 			taskSuccess(baseBean);
 		} else if (baseBean.statusInfo.isOther()) {
@@ -32,14 +30,14 @@ public abstract class AbstractObserver<T extends BaseBean> implements Observer<T
 	}
 	
 	@Override
-	public void onError(Throwable throwable) {
+	public final void onError(Throwable throwable) {
 		taskStop();
 		throwable.printStackTrace();
 		taskError(throwable);
 	}
 	
 	@Override
-	public void onComplete() {
+	public final void onComplete() {
 		LogUtils.d("AbstractTaskSubscriber", "onComplete()");
 		taskStop();
 	}

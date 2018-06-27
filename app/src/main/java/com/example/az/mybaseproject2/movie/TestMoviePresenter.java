@@ -7,6 +7,8 @@ import com.example.resource.network.TaskObserver;
 import com.example.resource.utils.LogUtils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -16,25 +18,34 @@ import io.reactivex.schedulers.Schedulers;
 class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 		implements TestMovieContract.Presenter {
 	
-	MovieInfoBean currentInfoBean;
-	
 	TestMoviePresenter(TestMovieContract.View basicView) {
 		super(basicView);
 	}
 	
 	@Override
-	public void listMovie(int start, int count) {
-		ServiceFactory.createService("https://api.douban.com/v2/movie/", TestMovieService.class)
+	public Disposable listMovie(int start, int count) {
+		final Disposable d = ServiceFactory.createService("https://api.douban.com/v2/movie/", TestMovieService.class)
 				.listMovie(start, count)
 				.subscribeOn(Schedulers.io())
+				.doOnSubscribe(new Consumer<Disposable>() {
+					@Override
+					public void accept(Disposable disposable) throws Exception {
+						LogUtils.d("TestMoviePresenter", "doOnSubscribe()--disposable=" + disposable);
+					}
+				})
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new TaskObserver<MovieInfoBean>(basicView) {
+				.subscribeWith(new TaskObserver<MovieInfoBean>(basicView) {
+					
+					@Override
+					public void taskStart() {
+						super.taskStart();
+					}
+					
 					@Override
 					public void taskSuccess(MovieInfoBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
 						super.taskSuccess(basicBean);
 						basicView.updateMovieList(basicBean);
-						currentInfoBean = basicBean;
 					}
 					
 					@Override
@@ -42,7 +53,6 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 						LogUtils.d("TestMoviePresenter", "taskFailure()");
 						super.taskFailure(basicBean);
 						basicView.updateMovieList(basicBean);
-						currentInfoBean = basicBean;
 					}
 					
 					@Override
@@ -50,8 +60,12 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 						LogUtils.d("TestMoviePresenter", "taskError()");
 						super.taskError(throwable);
 						basicView.updateMovieList(null);
-						// basicView.updateMovieList(currentInfoBean);
 					}
 				});
+		LogUtils.d("TestMoviePresenter", "doOnSubscribe()-2222-disposable=" + d);
+		
+		addDisposable(d);
+		
+		return d;
 	}
 }

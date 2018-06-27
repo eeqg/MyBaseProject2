@@ -1,5 +1,7 @@
 package com.example.resource.base;
 
+import com.example.resource.utils.LogUtils;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -29,11 +31,12 @@ public abstract class BasePresenter<V extends BaseContract.View> implements Base
 	}
 	
 	@Override
-	public void addDisposable(Disposable subscription) {
+	public void addDisposable(Disposable disposable) {
+		LogUtils.d("BasePresenter", "addDisposable()--disposable="+disposable);
 		if (this.mCompositeDisposable == null || this.mCompositeDisposable.isDisposed()) {
 			this.mCompositeDisposable = new CompositeDisposable();
 		}
-		this.mCompositeDisposable.add(subscription);
+		this.mCompositeDisposable.add(disposable);
 	}
 	
 	/**
@@ -41,6 +44,7 @@ public abstract class BasePresenter<V extends BaseContract.View> implements Base
 	 */
 	@Override
 	public void unDisposable() {
+		LogUtils.d("BasePresenter", "unDisposable()--mCompositeDisposable="+mCompositeDisposable);
 		if (this.mCompositeDisposable != null) {
 			this.mCompositeDisposable.dispose();
 		}

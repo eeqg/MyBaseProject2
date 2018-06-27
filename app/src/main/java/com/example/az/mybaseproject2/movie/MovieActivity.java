@@ -49,13 +49,12 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 				// LogUtils.d("currentPage=" + currentPage);
 				int count = 20;
 				int start = (currentPage - 1) * count;
-				presenter.listMovie(start, count);
-				return null;
+				return presenter.listMovie(start, count);
 			}
 			
 			@Override
-			public void onCancel(Disposable subscription) {
-				subscription.dispose();
+			public void onCancel(Disposable disposable) {
+				disposable.dispose();
 			}
 		});
 	}
