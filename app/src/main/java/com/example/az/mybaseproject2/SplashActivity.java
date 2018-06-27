@@ -17,16 +17,11 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
 	private Handler handler = new Handler(this);
 	
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		
 		requestPermissions();
-	}
-	
-	@Override
-	public BaseContract.Presenter initPresenter() {
-		return null;
 	}
 	
 	/**

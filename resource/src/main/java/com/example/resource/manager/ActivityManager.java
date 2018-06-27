@@ -2,6 +2,8 @@ package com.example.resource.manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.util.Stack;
@@ -101,6 +103,13 @@ public class ActivityManager {
 		activityStack.clear();
 	}
 	
+	/**
+	 * 跳转到Activity
+	 */
+	public void launchActivity(Context context, Class<? extends AppCompatActivity> clazz) {
+		Intent intent = new Intent(context, clazz);
+		context.startActivity(intent);
+	}
 	
 	/**
 	 * 退出应用程序

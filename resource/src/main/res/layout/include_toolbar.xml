@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+	
+	<data>
+		
+		<import type="android.view.View"/>
+		
+		<import type="com.example.resource.base.ToolbarAction"/>
+		
+		<variable
+			name="title"
+			type="String"/>
+		
+		<variable
+			name="titleColorId"
+			type="int"/>
+		
+		<variable
+			name="leftAction"
+			type="ToolbarAction"/>
+		
+		<variable
+			name="rightAction"
+			type="ToolbarAction"/>
+		
+		<variable
+			name="backgroundResId"
+			type="int"/>
+		
+		<variable
+			name="hideDivider"
+			type="Boolean"/>
+	</data>
+	
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?android:attr/actionBarSize"
+		android:background="@{backgroundResId != 0 ? backgroundResId : @color/colorPrimary}"
+		app:contentInsetEnd="0dp"
+		app:contentInsetLeft="0dp"
+		app:contentInsetRight="0dp"
+		app:contentInsetStart="0dp"
+		tools:background="@android:color/white">
+		
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			
+			<TextView
+				android:id="@+id/tvToolbarLeft"
+				android:layout_width="?android:attr/actionBarSize"
+				android:layout_height="?android:attr/actionBarSize"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:background="?selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:gravity="center"
+				android:onClick="@{leftAction.listener}"
+				android:text="@{leftAction.text}"
+				android:textColor="@{leftAction.textColor != 0 ? leftAction.textColor : @color/colorTextAccent}"
+				android:textSize="16sp"
+				android:visibility="@{leftAction.text == null ? View.GONE : View.VISIBLE}"
+				tools:text="@string/app_name"
+				tools:textColor="@color/colorTextAccent"
+				tools:visibility="visible"/>
+			
+			<ImageView
+				android:id="@+id/ivToolbarLeft"
+				android:layout_width="?android:attr/actionBarSize"
+				android:layout_height="?android:attr/actionBarSize"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:background="?selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:contentDescription="@string/app_name"
+				android:onClick="@{leftAction.listener}"
+				android:scaleType="centerInside"
+				android:src="@{leftAction.drawable}"
+				android:visibility="@{leftAction.drawable == null ? View.GONE : View.VISIBLE}"
+				tools:src="@mipmap/ic_back_black"/>
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_centerInParent="true"
+				android:layout_marginLeft="?android:attr/actionBarSize"
+				android:layout_marginRight="?android:attr/actionBarSize"
+				android:gravity="center"
+				android:maxLines="1"
+				android:text="@{title}"
+				android:textColor="@{titleColorId != 0 ? titleColorId : @android:color/white}"
+				android:textSize="@dimen/dimenTextAccent"
+				tools:ignore="RelativeOverlap"
+				tools:text="@string/app_name"
+				tools:textColor="@color/colorTextPrimary"/>
+			
+			<TextView
+				android:id="@+id/tvToolbarRight"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:layout_marginEnd="10dp"
+				android:layout_marginRight="10dp"
+				android:background="?selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:gravity="center"
+				android:onClick="@{rightAction.listener}"
+				android:paddingBottom="10dp"
+				android:paddingLeft="5dp"
+				android:paddingRight="5dp"
+				android:paddingTop="10dp"
+				android:text="@{rightAction.text}"
+				android:textColor="@{rightAction.textColor != 0 ? rightAction.textColor : @android:color/white}"
+				android:textSize="16sp"
+				android:visibility="@{rightAction.text == null ? View.GONE : View.VISIBLE}"
+				tools:ignore="RelativeOverlap"
+				tools:text="@string/app_name"
+				tools:textColor="@color/colorTextAccent"
+				tools:visibility="visible"/>
+			
+			<ImageView
+				android:id="@+id/ivToolbarRight"
+				android:layout_width="?android:attr/actionBarSize"
+				android:layout_height="?android:attr/actionBarSize"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentRight="true"
+				android:background="?selectableItemBackgroundBorderless"
+				android:clickable="true"
+				android:contentDescription="@string/app_name"
+				android:onClick="@{rightAction.listener}"
+				android:scaleType="centerInside"
+				android:src="@{rightAction.drawable}"
+				android:visibility="@{rightAction.drawable == null ? View.GONE : View.VISIBLE}"
+				tools:src="@mipmap/ic_back_black"/>
+			
+			<View
+				style="@style/ViewDividerHorizontal"
+				android:layout_alignParentBottom="true"
+				android:layout_marginTop="@dimen/dimenThemeDivider"
+				android:visibility="gone"/>
+		</RelativeLayout>
+	</android.support.v7.widget.Toolbar>
+</layout>

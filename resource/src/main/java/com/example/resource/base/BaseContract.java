@@ -11,6 +11,10 @@ public interface BaseContract {
 		void showLoading();
 		
 		void hideLoading();
+		
+		void tokenTimeOut();
+		
+		void tokenNotFound();
 	}
 	
 	interface Presenter {

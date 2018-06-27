@@ -3,8 +3,11 @@ package com.example.resource.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
+import com.example.resource.R;
 import com.example.resource.manager.ActivityManager;
 
 /**
@@ -18,14 +21,16 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends App
 	public Context mContext;
 	
 	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		ActivityManager.getAppInstance().addActivity(this);//将当前activity添加进入管理栈
 		presenter = initPresenter();
 	}
 	
-	public abstract P initPresenter();
+	protected P initPresenter() {
+		return null;
+	}
 	
 	@Override
 	public void showLoading() {
@@ -35,6 +40,31 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends App
 	@Override
 	public void hideLoading() {
 	
+	}
+	
+	@Override
+	public void tokenTimeOut() {
+	
+	}
+	
+	@Override
+	public void tokenNotFound() {
+	
+	}
+	
+	/**
+	 * 创建返回操作
+	 *
+	 * @return 返回操作
+	 */
+	protected ToolbarAction createLeftBack() {
+		return ToolbarAction.createIcon(ActivityCompat.getDrawable(this, R.mipmap.ic_back_white))
+				.setListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						onBackPressed();
+					}
+				});
 	}
 	
 	public void promptMessage(String message) {

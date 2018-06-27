@@ -1,3 +1,5 @@
 <resources>
 	<string name="app_name">MyBaseProject2</string>
+	<string name="title_home">Home</string>
+	<string name="title_movie">豆瓣电影TOP250</string>
 </resources>

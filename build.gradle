@@ -18,6 +18,8 @@ allprojects {
 	repositories {
 		google()
 		jcenter()
+		
+		maven { url 'https://jitpack.io' }
 	}
 }
 
@@ -30,7 +32,7 @@ ext {
 	minSdkVersion = 15
 	targetSdkVersion = 26
 	compileSdkVersion = 26
-	buildToolsVersion = '26.0.1'
+	buildToolsVersion = '26.0.2'
 	
 	// App dependencies
 	supportLibraryVersion = '26.1.0'
@@ -39,5 +41,9 @@ ext {
 	rxandroidVersion = '2.0.1'
 	retrofitVersion = '2.3.0'
 	
+	libRetrofitGson = 'com.squareup.retrofit2:converter-gson:2.3.0'
 	libLogger = 'com.orhanobut:logger:2.2.0'
+	libRefresh = 'com.github.eeqg:KycqRefresh:1.0'
+	libFresco = 'com.facebook.fresco:fresco:1.4.0'
+	libSwipeback = 'me.imid.swipebacklayout.lib:library:1.1.0'
 }
