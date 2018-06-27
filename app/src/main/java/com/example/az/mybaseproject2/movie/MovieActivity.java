@@ -10,6 +10,7 @@ import com.example.az.mybaseproject2.movie.bean.MovieInfoBean;
 import com.example.resource.base.BaseSwipeBackActivity;
 import com.example.resource.component.NormalItemDecoration;
 import com.example.resource.utils.LogUtils;
+import com.example.resource.utils.StatusBarUtil;
 import com.kycq.library.refresh.RecyclerAdapter;
 
 import io.reactivex.disposables.Disposable;
@@ -24,6 +25,8 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 		super.onCreate(savedInstanceState);
 		this.dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie);
 		this.dataBinding.setLeftAction(createLeftBack());
+		
+		StatusBarUtil.setColorForSwipeBack(this, getResources().getColor(R.color.colorPrimaryDark), 0);
 		
 		observerContent();
 		

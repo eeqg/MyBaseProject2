@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import com.example.resource.base.BaseActivity;
 import com.example.resource.base.BaseContract;
 import com.example.resource.utils.PermissionUtils;
+import com.example.resource.utils.StatusBarUtil;
 
 public class SplashActivity extends BaseActivity implements Handler.Callback {
 	private final int CODE_HOME = 1;
@@ -20,6 +21,8 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		
+		StatusBarUtil.setTranslucent(this, 55);
 		
 		requestPermissions();
 	}
@@ -32,7 +35,7 @@ public class SplashActivity extends BaseActivity implements Handler.Callback {
 				.setOnPermissionListener(new PermissionUtils.OnPermissionListener() {
 					@Override
 					public void onGranted() {
-						handler.sendEmptyMessageDelayed(0, 1000);
+						handler.sendEmptyMessageDelayed(0, 3000);
 					}
 					
 					@Override
