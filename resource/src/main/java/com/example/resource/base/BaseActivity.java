@@ -71,6 +71,10 @@ public abstract class BaseActivity<P extends BaseContract.Presenter> extends App
 		BaseApp.toast(message);
 	}
 	
+	public void promptMessage(int resId) {
+		promptMessage(getString(resId));
+	}
+	
 	@Override
 	protected void onDestroy() {
 		ActivityManager.getAppInstance().removeActivity(this);//将当前activity移除管理栈

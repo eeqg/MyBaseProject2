@@ -1,6 +1,7 @@
 package com.example.resource.network;
 
 import com.example.resource.base.BaseApp;
+import com.example.resource.manager.EventBusManager;
 import com.example.resource.utils.LogUtils;
 import com.example.resource.utils.NetworkUtils;
 
@@ -43,7 +44,8 @@ public class ServiceFactory {
 					retrofit = new Retrofit.Builder()
 							.baseUrl(baseUrl)
 							.client(getOkHttpClient())
-							.addConverterFactory(GsonConverterFactory.create())
+							// .addConverterFactory(GsonConverterFactory.create())
+							.addConverterFactory(CustomGsonConverterFactory.create())
 							.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 							.build();
 				}
@@ -130,7 +132,9 @@ public class ServiceFactory {
 			
 			LogUtils.d(TAG, "requestInterceptor -- isNetworkAvailable : " + isNetworkAvailable);
 			if (!isNetworkAvailable) {
-				BaseApp.toast("請檢查網絡!!");
+				// BaseApp.toast("請檢查網絡!!");
+				LogUtils.d(TAG, "請檢查網絡!!");
+				EventBusManager.post(EventBusManager.EVENT_KEY_NETWORK_UNAVAILABLE);
 				
 				CacheControl tempCacheControl = new CacheControl.Builder()
 						// .onlyIfCached()

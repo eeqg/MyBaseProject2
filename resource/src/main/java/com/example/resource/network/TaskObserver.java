@@ -30,6 +30,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	
 	@Override
 	public void taskStop() {
+		LogUtils.d("TaskObserver", "taskStop()--");
 		BaseContract.View basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.hideLoading();
@@ -38,6 +39,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	
 	@Override
 	public void taskSuccess(T basicBean) {
+		LogUtils.d("TaskObserver", "taskSuccess()--");
 		BaseContract.View basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.hideLoading();

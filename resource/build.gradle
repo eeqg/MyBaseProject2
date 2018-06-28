@@ -47,4 +47,5 @@ dependencies {
 	compile(rootProject.ext.libRefresh)
 	compile(rootProject.ext.libFresco)
 	compile(rootProject.ext.libLogger)
+	compile(rootProject.ext.libEventBus)
 }
