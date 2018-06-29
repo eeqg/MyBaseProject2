@@ -152,6 +152,9 @@ public class ServiceFactory {
 		}
 	};
 	
+	/**
+	 * 网络拦截器，主要用于重试或重写
+	 */
 	private static final Interceptor responseInterceptor = new Interceptor() {
 		@Override
 		public Response intercept(Chain chain) throws IOException {
