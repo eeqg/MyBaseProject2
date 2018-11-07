@@ -58,20 +58,23 @@ public class ServiceFactory {
 		if (okHttpClient == null) {
 			synchronized (OkHttpClient.class) {
 				if (okHttpClient == null) {
-					File cacheFile = new File(BaseApp.INSTANCE.getCacheDir(), "responses");
-					Cache cache = new Cache(cacheFile, DEFAULT_CACHE_SIZE);
 					okHttpClient = new OkHttpClient.Builder()
 							// .addInterceptor(new CachesInterceptor())
 							.addInterceptor(requestInterceptor)
 							.addNetworkInterceptor(responseInterceptor)
 							.addInterceptor(LogInterceptor)
 							.connectTimeout(30, TimeUnit.SECONDS)
-							.cache(cache)
+							// .cache(getCache()) //设置缓存
 							.build();
 				}
 			}
 		}
 		return okHttpClient;
+	}
+	
+	private static Cache getCache() {
+		File cacheFile = new File(BaseApp.INSTANCE.getCacheDir(), "responses");
+		return new Cache(cacheFile, DEFAULT_CACHE_SIZE);
 	}
 	
 	private class TokenInterceptor implements Interceptor {
