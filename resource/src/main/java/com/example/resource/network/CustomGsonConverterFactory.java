@@ -1,5 +1,7 @@
 package com.example.resource.network;
 
+import android.support.annotation.NonNull;
+
 import com.example.resource.base.BaseApp;
 import com.example.resource.utils.LogUtils;
 import com.google.gson.Gson;
@@ -55,35 +57,107 @@ public class CustomGsonConverterFactory extends Converter.Factory {
 		TypeToken typeToken = TypeToken.get(type);
 		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
 		if (typeToken.getRawType() == BaseBean.class) {
-		
+			return new BaseResponseBodyConverter<>();
 		}
-		return new CustomGsonResponseBodyConverter<>(gson, adapter);
+		if (BaseBean.class.isAssignableFrom(typeToken.getRawType())) {
+			if (ArrayBean.class.isAssignableFrom(typeToken.getRawType())) {
+				return new ArrayResponseBodyConverter<>(type);
+			} else {
+				return new ObjectResponseBodyConverter<>(type);
+			}
+		}
+		return new OtherResponseBodyConverter<>(gson, adapter);
 	}
 	
-	class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
+	private class BaseResponseBodyConverter<T> implements Converter<ResponseBody, BaseBean> {
+		@Override
+		public BaseBean convert(@NonNull ResponseBody value) throws IOException {
+			BasicBean basicBean = gson.fromJson(value.charStream(), BasicBean.class);
+			if (BaseApp.isDebug()) {
+				LogUtils.i(TAG, "code = " + basicBean.statusCode
+						+ ", message = " + basicBean.statusMessage
+						+ ", data = " + basicBean.resultData);
+			}
+			
+			BaseBean resultBean = new BaseBean();
+			resultBean.statusInfo.statusCode = basicBean.statusCode;
+			resultBean.statusInfo.statusMessage = basicBean.statusMessage;
+			resultBean.resultData = basicBean.resultData;
+			
+			return resultBean;
+		}
+	}
+	
+	private class ArrayResponseBodyConverter<T extends ArrayBean> implements Converter<ResponseBody, T> {
+		private Type type;
+		
+		ArrayResponseBodyConverter(Type type) {
+			this.type = type;
+		}
+		
+		@Override
+		public T convert(@NonNull ResponseBody value) throws IOException {
+			BasicBean basicBean = gson.fromJson(value.charStream(), BasicBean.class);
+			if (BaseApp.isDebug()) {
+				LogUtils.i(TAG, "code = " + basicBean.statusCode
+						+ ", message = " + basicBean.statusMessage
+						+ ", data = " + basicBean.resultData);
+			}
+			
+			T resultBean = gson.fromJson(
+					String.format("{\"result\":%s}", basicBean.resultData == null ? "[]" : basicBean.resultData),
+					this.type);
+			resultBean.statusInfo.statusCode = basicBean.statusCode;
+			resultBean.statusInfo.statusMessage = basicBean.statusMessage;
+			
+			return resultBean;
+		}
+	}
+	
+	private class ObjectResponseBodyConverter<T extends BaseBean> implements Converter<ResponseBody, T> {
+		private Type type;
+		
+		ObjectResponseBodyConverter(Type type) {
+			this.type = type;
+		}
+		
+		@Override
+		public T convert(@NonNull ResponseBody value) throws IOException {
+			BasicBean basicBean = gson.fromJson(value.charStream(), BasicBean.class);
+			if (BaseApp.isDebug()) {
+				LogUtils.i(TAG, "code = " + basicBean.statusCode
+						+ ", message = " + basicBean.statusMessage
+						+ ", data = " + basicBean.resultData);
+			}
+			
+			T resultBean = gson.fromJson(
+					basicBean.resultData == null ? "{}" : basicBean.resultData, this.type);
+			resultBean.statusInfo.statusCode = basicBean.statusCode;
+			resultBean.statusInfo.statusMessage = basicBean.statusMessage;
+			
+			return resultBean;
+		}
+	}
+	
+	private class OtherResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 		private final MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=UTF-8");
 		private final Charset UTF_8 = Charset.forName("UTF-8");
 		private final Gson gson;
 		private final TypeAdapter<T> adapter;
 		
-		CustomGsonResponseBodyConverter(Gson gson, TypeAdapter<T> adapter) {
+		OtherResponseBodyConverter(Gson gson, TypeAdapter<T> adapter) {
 			this.gson = gson;
 			this.adapter = adapter;
 		}
 		
 		@Override
-		public T convert(ResponseBody value) throws IOException {
+		public T convert(@NonNull ResponseBody value) throws IOException {
 			String response = value.string();
 			// BaseBean baseBean = gson.fromJson(response, BaseBean.class);
 			// // if (httpStatus.isCodeInvalid()) {
 			// // 	value.close();
 			// // 	throw new ApiException(httpStatus.getCode(), httpStatus.getMessage());
 			// // }
-			// if (BasicApp.isDebug()) {
-			// 	Log.i(TAG, "code = " + baseBean.statusCode
-			// 			+ ", message = " + baseBean.statusMessage
-			// 			+ ", data = " + baseBean.resultData);
-			// }
 			LogUtils.d("isDebug : " + BaseApp.isDebug());
 			if (BaseApp.isDebug()) {
 				LogUtils.json(response);
@@ -92,8 +166,12 @@ public class CustomGsonConverterFactory extends Converter.Factory {
 			MediaType contentType = value.contentType();
 			Charset charset = contentType != null ? contentType.charset(UTF_8) : UTF_8;
 			InputStream inputStream = new ByteArrayInputStream(response.getBytes());
-			Reader reader = new InputStreamReader(inputStream, charset);
-			JsonReader jsonReader = gson.newJsonReader(reader);
+			Reader reader = null;
+			JsonReader jsonReader = null;
+			if (charset != null) {
+				reader = new InputStreamReader(inputStream, charset);
+				jsonReader = gson.newJsonReader(reader);
+			}
 			
 			try {
 				return adapter.read(jsonReader);
@@ -108,7 +186,7 @@ public class CustomGsonConverterFactory extends Converter.Factory {
 		int statusCode;
 		@SerializedName("msg")
 		String statusMessage;
-		@SerializedName("result")
+		@SerializedName("data")
 		String resultData;
 	}
 }
