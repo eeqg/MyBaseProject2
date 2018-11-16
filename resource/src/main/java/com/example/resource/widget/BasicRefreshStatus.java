@@ -25,7 +25,7 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 	private TextView tvCheck;
 	private TextView tvReload;
 	
-	private AnimationSet animation;
+	private RotateAnimation animation;
 	
 	private RefreshLayout.OnRefreshListener oldOnRefreshListener;
 	
@@ -63,26 +63,34 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 			}
 		});
 		
-		Animation scaleAnimation = new ScaleAnimation(
-				1.0F, 0.55F, 1.0F, 0.55F,
+		// Animation scaleAnimation = new ScaleAnimation(
+		// 		1.0F, 0.55F, 1.0F, 0.55F,
+		// 		Animation.RELATIVE_TO_SELF, 0.5F,
+		// 		Animation.RELATIVE_TO_SELF, 0.5F);
+		// scaleAnimation.setDuration(800);
+		// scaleAnimation.setRepeatMode(Animation.REVERSE);
+		// scaleAnimation.setRepeatCount(Animation.INFINITE);
+		//
+		// Animation rotateAnimation = new RotateAnimation(
+		// 		0, 360,
+		// 		Animation.RELATIVE_TO_SELF, 0.5F,
+		// 		Animation.RELATIVE_TO_SELF, 0.5F);
+		// rotateAnimation.setDuration(600);
+		// scaleAnimation.setRepeatMode(Animation.REVERSE);
+		// rotateAnimation.setRepeatCount(Animation.INFINITE);
+		//
+		// this.animation = new AnimationSet(true);
+		// this.animation.setInterpolator(new LinearInterpolator());
+		// this.animation.addAnimation(scaleAnimation);
+		// this.animation.addAnimation(rotateAnimation);
+		
+		this.animation = new RotateAnimation(
+				0, 3600,
 				Animation.RELATIVE_TO_SELF, 0.5F,
 				Animation.RELATIVE_TO_SELF, 0.5F);
-		scaleAnimation.setDuration(800);
-		scaleAnimation.setRepeatMode(Animation.REVERSE);
-		scaleAnimation.setRepeatCount(Animation.INFINITE);
-		
-		Animation rotateAnimation = new RotateAnimation(
-				0, 360,
-				Animation.RELATIVE_TO_SELF, 0.5F,
-				Animation.RELATIVE_TO_SELF, 0.5F);
-		rotateAnimation.setDuration(600);
-		scaleAnimation.setRepeatMode(Animation.REVERSE);
-		rotateAnimation.setRepeatCount(Animation.INFINITE);
-		
-		this.animation = new AnimationSet(true);
+		this.animation.setDuration(10000);
 		this.animation.setInterpolator(new LinearInterpolator());
-		this.animation.addAnimation(scaleAnimation);
-		this.animation.addAnimation(rotateAnimation);
+		this.animation.setRepeatCount(Animation.INFINITE);
 	}
 	
 	@Override
@@ -101,7 +109,7 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 	
 	@Override
 	public void onRefresh() {
-		this.ivStatus.setImageResource(R.mipmap.img_refresh_status);
+		this.ivStatus.setImageResource(R.mipmap.ic_loading);
 		this.ivStatus.startAnimation(this.animation);
 		this.tvStatus.setText(R.string.loading_dot);
 		this.tvCheck.setVisibility(GONE);
@@ -111,7 +119,6 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 	@Override
 	public boolean onRefreshComplete(StatusInfo statusInfo) {
 		this.ivStatus.clearAnimation();
-		LogUtils.d("onRefreshComplete()--statusInfo = "+statusInfo);
 		if (statusInfo == null) {
 			this.ivStatus.setImageResource(R.mipmap.img_network_error);
 			this.ivStatus.setEnabled(false);

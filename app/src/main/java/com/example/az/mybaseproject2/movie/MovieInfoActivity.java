@@ -60,7 +60,7 @@ public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
 				.subscribeWith(new SimpleTaskObserver<MovieInfoBean>(MovieInfoActivity.this) {
 					@Override
 					public void taskStart() {
-						super.taskStart();
+						// super.taskStart();
 					}
 					
 					@Override
