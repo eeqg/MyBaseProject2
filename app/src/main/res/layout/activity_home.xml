@@ -20,7 +20,8 @@
 		android:background="@drawable/bg_window"
 		android:orientation="vertical">
 		
-		<include layout="@layout/include_toolbar"
+		<include
+			layout="@layout/include_toolbar"
 			app:leftAction="@{leftAction}"
 			app:title="@{@string/title_home}"/>
 		
@@ -38,7 +39,16 @@
 				android:text="movie"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toTopOf="parent"/>
+			
+			<Button
+				android:id="@+id/btnGoods"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:text="Goods"
+				app:layout_constraintLeft_toLeftOf="@+id/btnMovie"
+				app:layout_constraintTop_toBottomOf="@+id/btnMovie"/>
 		</android.support.constraint.ConstraintLayout>
 	</LinearLayout>
-	
+
 </layout>

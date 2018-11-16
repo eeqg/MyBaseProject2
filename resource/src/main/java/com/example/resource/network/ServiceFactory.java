@@ -38,9 +38,9 @@ public class ServiceFactory {
 	}
 	
 	public static Retrofit getRetrofit(String baseUrl) {
-		if (retrofit == null) {
-			synchronized (Retrofit.class) {
-				if (retrofit == null) {
+		// if (retrofit == null) {
+		// 	synchronized (Retrofit.class) {
+		// 		if (retrofit == null) {
 					retrofit = new Retrofit.Builder()
 							.baseUrl(baseUrl)
 							.client(getOkHttpClient())
@@ -48,9 +48,9 @@ public class ServiceFactory {
 							.addConverterFactory(CustomGsonConverterFactory.create())
 							.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 							.build();
-				}
-			}
-		}
+				// }
+			// }
+		// }
 		return retrofit;
 	}
 	

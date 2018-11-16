@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.az.mybaseproject2.databinding.ActivityHomeBinding;
+import com.example.az.mybaseproject2.goods.GoodsListActivity;
 import com.example.az.mybaseproject2.movie.MovieActivity;
 import com.example.resource.base.BaseActivity;
 import com.example.resource.manager.ActivityManager;
@@ -27,6 +28,13 @@ public class HomeActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				ActivityManager.getAppInstance().launchActivity(mContext, MovieActivity.class);
+			}
+		});
+		
+		this.dataBinding.btnGoods.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ActivityManager.getAppInstance().launchActivity(mContext, GoodsListActivity.class);
 			}
 		});
 	}

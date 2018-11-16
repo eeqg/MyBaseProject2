@@ -44,6 +44,8 @@
 		</activity>
 		<activity android:name=".movie.MovieInfoActivity">
 		</activity>
+		<activity android:name=".goods.GoodsListActivity">
+		</activity>
 	</application>
 
 </manifest>
