@@ -1,6 +1,5 @@
 package com.example.resource.network;
 
-import com.example.resource.base.BaseBean;
 import com.example.resource.utils.LogUtils;
 
 import io.reactivex.observers.DisposableObserver;

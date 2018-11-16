@@ -43,7 +43,7 @@ ext {
 	
 	libRetrofitGson = 'com.squareup.retrofit2:converter-gson:2.3.0'
 	libLogger = 'com.orhanobut:logger:2.2.0'
-	libRefresh = 'com.github.eeqg:KycqRefresh:1.0'
+	libRefresh = 'com.github.eeqg:refresh:0.1.1-alpha'
 	libFresco = 'com.facebook.fresco:fresco:1.4.0'
 	libSwipeback = 'me.imid.swipebacklayout.lib:library:1.1.0'
 	libEventBus = 'org.greenrobot:eventbus:3.0.0'

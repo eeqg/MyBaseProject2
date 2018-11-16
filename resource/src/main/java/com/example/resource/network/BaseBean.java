@@ -1,4 +1,4 @@
-package com.example.resource.base;
+package com.example.resource.network;
 
 import com.example.resource.network.StatusInfo;
 

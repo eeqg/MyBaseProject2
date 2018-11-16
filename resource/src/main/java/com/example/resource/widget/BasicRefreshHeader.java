@@ -11,7 +11,8 @@ import android.widget.TextView;
 
 import com.example.resource.R;
 import com.example.resource.network.StatusInfo;
-import com.kycq.library.refresh.RefreshHeader;
+
+import cn.shyman.library.refresh.RefreshHeader;
 
 public class BasicRefreshHeader extends LinearLayout
 		implements RefreshHeader<StatusInfo> {

@@ -6,13 +6,19 @@ import android.support.v7.widget.LinearLayoutManager;
 
 import com.example.az.mybaseproject2.R;
 import com.example.az.mybaseproject2.databinding.ActivityMovieBinding;
-import com.example.az.mybaseproject2.movie.bean.MovieInfoBean;
+import com.example.az.mybaseproject2.movie.bean.MovieItemBean;
+import com.example.az.mybaseproject2.movie.bean.MovieListBean;
+import com.example.resource.base.BaseConst;
 import com.example.resource.base.BaseSwipeBackActivity;
 import com.example.resource.component.NormalItemDecoration;
+import com.example.resource.utils.LaunchUtil;
 import com.example.resource.utils.LogUtils;
 import com.example.resource.utils.StatusBarUtil;
-import com.kycq.library.refresh.RecyclerAdapter;
 
+import java.util.HashMap;
+
+import cn.shyman.library.refresh.OnTaskListener;
+import cn.shyman.library.refresh.RecyclerAdapter;
 import io.reactivex.disposables.Disposable;
 
 public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Presenter> implements TestMovieContract.View {
@@ -45,7 +51,7 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 		this.testMovieListAdapter = new TestMovieListAdapter(this);
 		this.testMovieListAdapter.setRefreshLayout(this.dataBinding.refreshLayout);
 		this.testMovieListAdapter.setRecyclerView(this.dataBinding.recyclerView);
-		this.testMovieListAdapter.setOnTaskListener(new RecyclerAdapter.OnTaskListener<Disposable>() {
+		this.testMovieListAdapter.setOnTaskListener(new OnTaskListener<Disposable>() {
 			@Override
 			public Disposable onTask() {
 				int currentPage = testMovieListAdapter.getCurrentPage();
@@ -60,10 +66,21 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 				disposable.dispose();
 			}
 		});
+		
+		testMovieListAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+			@Override
+			public void onItemClick(RecyclerAdapter.ItemHolder itemHolder) {
+				MovieItemBean itemBean = testMovieListAdapter.getItem(itemHolder.getAdapterPosition());
+				HashMap<String, Object> params = new HashMap<>();
+				params.put(BaseConst.ID, itemBean.id);
+				params.put(BaseConst.TITLE, itemBean.title);
+				LaunchUtil.launchActivity(mContext, MovieInfoActivity.class, params);
+			}
+		});
 	}
 	
 	@Override
-	public void updateMovieList(MovieInfoBean movieInfoBean) {
+	public void updateMovieList(MovieListBean movieInfoBean) {
 		LogUtils.d("movieInfoBean" + movieInfoBean);
 		this.testMovieListAdapter.swipeResult(movieInfoBean);
 	}

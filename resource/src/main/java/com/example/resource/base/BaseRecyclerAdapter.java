@@ -11,86 +11,140 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.resource.R;
+import com.example.resource.network.BaseBean;
 import com.example.resource.network.StatusInfo;
-import com.kycq.library.refresh.RecyclerAdapter;
 
-public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter<StatusInfo> {
-	protected AdapterInfo mAdapterInfo;
-	private int initPage = 1;
-	protected int currentPage = initPage;
+import cn.shyman.library.refresh.RecyclerAdapter;
+
+public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter {
+	/** 初始页码 */
+	private final int initPage = 1;
+	/** 当前页码 */
+	private int currentPage = initPage;
 	
-	public int getInitPage() {
+	private AdapterInfo completeAdapterInfo;
+	protected AdapterInfo adapterInfo;
+	
+	/**
+	 * 重置数据信息并刷新
+	 */
+	public final void forceRefresh() {
+		resetAdapterInfo(null);
+		swipeRefresh();
+	}
+	
+	/**
+	 * 获取初始页码
+	 *
+	 * @return 初始页码
+	 */
+	public final int getInitPage() {
 		return this.initPage;
 	}
 	
-	public int getCurrentPage() {
+	/**
+	 * 获取当前页码
+	 *
+	 * @return 当前页码
+	 */
+	public final int getCurrentPage() {
 		return this.currentPage;
 	}
 	
 	@Override
-	public void swipeRefreshReady() {
+	protected void notifyRefreshReady() {
 		this.currentPage = this.initPage;
 		resetAdapterInfo(null);
-		super.swipeRefreshReady();
-	}
-	
-	public void forceRefresh() {
-		this.currentPage = this.initPage;
-		resetAdapterInfo(null);
-		super.swipeRefresh();
+		super.notifyRefreshReady();
 	}
 	
 	@Override
-	public void swipeRefresh() {
+	protected void notifyRefresh() {
 		this.currentPage = this.initPage;
-		super.swipeRefresh();
-	}
-	
-	@Override
-	public void swipeComplete(StatusInfo statusInfo) {
-		if (statusInfo != null && statusInfo.isSuccessful()) {
-			this.currentPage++;
-		}
-		super.swipeComplete(statusInfo);
+		super.notifyRefresh();
 	}
 	
 	public void swipeResult(AdapterInfo adapterInfo) {
+		this.completeAdapterInfo = adapterInfo;
 		StatusInfo statusInfo = adapterInfo instanceof BaseBean ? ((BaseBean) adapterInfo).statusInfo : null;
+		swipeStatus(statusInfo);
+	}
+	
+	public void swipeStatus(StatusInfo statusInfo) {
 		boolean isRefreshing = this.currentPage == initPage;
-		if (statusInfo == null) {
+		if (statusInfo != null && statusInfo.isSuccessful()) {
 			if (isRefreshing) {
-				resetAdapterInfo(adapterInfo);
-			}
-			swipeComplete(null);
-		} else if (statusInfo.isSuccessful()) {
-			if (isRefreshing) {
-				resetAdapterInfo(adapterInfo);
-			} else {
+				resetAdapterInfo(this.completeAdapterInfo);
+			} else if (this.completeAdapterInfo != null) {
 				int oldItemCount = getItemCount();
-				updateAdapterInfo(adapterInfo);
+				updateAdapterInfo(this.completeAdapterInfo);
 				int newItemCount = getItemCount();
 				notifyItemRangeInserted(oldItemCount, newItemCount - oldItemCount);
 			}
-			swipeComplete(statusInfo);
+			super.swipeComplete(statusInfo);
 			if (hasMore()) {
 				swipeLoadReady();
 			}
 		} else {
-			swipeComplete(statusInfo);
+			if (this.currentPage == initPage) {
+				resetAdapterInfo(null);
+			}
+			super.swipeComplete(statusInfo);
 		}
+		this.completeAdapterInfo = null;
 	}
 	
-	private void resetAdapterInfo(AdapterInfo adapterInfo) {
-		mAdapterInfo = adapterInfo;
+	@Override
+	protected void notifyRefreshComplete(Object statusInfo) {
+		if (statusInfo instanceof StatusInfo) {
+			if (((StatusInfo) statusInfo).isSuccessful()) {
+				this.currentPage++;
+			}
+		}
+		super.notifyRefreshComplete(statusInfo);
 	}
 	
-	public abstract void updateAdapterInfo(@NonNull AdapterInfo adapterInfo);
+	@Override
+	protected void notifyLoadComplete(Object statusInfo) {
+		if (statusInfo instanceof StatusInfo) {
+			if (((StatusInfo) statusInfo).isSuccessful()) {
+				this.currentPage++;
+			}
+		}
+		super.notifyLoadComplete(statusInfo);
+	}
 	
-	public abstract boolean hasMore();
+	/**
+	 * 重置数据信息
+	 *
+	 * @param adapterInfo 数据信息
+	 */
+	protected void resetAdapterInfo(AdapterInfo adapterInfo) {
+		this.adapterInfo = adapterInfo;
+		notifyDataSetChanged();
+	}
 	
+	/**
+	 * 更新数据信息
+	 *
+	 * @param adapterInfo 数据信息
+	 */
+	protected abstract void updateAdapterInfo(@NonNull AdapterInfo adapterInfo);
+	
+	/**
+	 * 获取指定位置数据
+	 *
+	 * @param position 指定位置
+	 * @return 数据信息
+	 */
 	public Object getItem(int position) {
 		return null;
 	}
+	
+	/**
+	 * 判断是否需加载更多
+	 */
+	public abstract boolean hasMore();
 	
 	@Override
 	public RefreshHolder<StatusInfo> onCreateRefreshHolder() {
@@ -140,11 +194,12 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter<S
 	}
 	
 	public static class BasicRefreshHolder extends RefreshHolder<StatusInfo> {
-		private Animation animation;
+		// private AnimationSet animation;
+		private RotateAnimation animation;
 		private ImageView ivStatus;
 		private TextView tvStatus;
 		private TextView tvCheck;
-		private TextView tvReload;
+		protected TextView tvReload;
 		
 		private int emptyDrawableId;
 		private int emptyTextId;
@@ -152,6 +207,27 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter<S
 		public BasicRefreshHolder(int emptyDrawableId, int emptyTextId) {
 			this.emptyDrawableId = emptyDrawableId;
 			this.emptyTextId = emptyTextId;
+			
+			// Animation scaleAnimation = new ScaleAnimation(
+			// 		1.0F, 0.55F, 1.0F, 0.55F,
+			// 		Animation.RELATIVE_TO_SELF, 0.5F,
+			// 		Animation.RELATIVE_TO_SELF, 0.5F);
+			// scaleAnimation.setDuration(800);
+			// scaleAnimation.setRepeatMode(Animation.REVERSE);
+			// scaleAnimation.setRepeatCount(Animation.INFINITE);
+			//
+			// Animation rotateAnimation = new RotateAnimation(
+			// 		0, 360,
+			// 		Animation.RELATIVE_TO_SELF, 0.5F,
+			// 		Animation.RELATIVE_TO_SELF, 0.5F);
+			// rotateAnimation.setDuration(600);
+			// scaleAnimation.setRepeatMode(Animation.REVERSE);
+			// rotateAnimation.setRepeatCount(Animation.INFINITE);
+			//
+			// this.animation = new AnimationSet(true);
+			// this.animation.setInterpolator(new LinearInterpolator());
+			// this.animation.addAnimation(scaleAnimation);
+			// this.animation.addAnimation(rotateAnimation);
 			
 			this.animation = new RotateAnimation(
 					0, 3600,
@@ -189,7 +265,7 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter<S
 		}
 		
 		@Override
-		protected void onRefreshing() {
+		protected void onRefresh() {
 			this.ivStatus.setImageResource(R.mipmap.ic_loading);
 			this.ivStatus.startAnimation(this.animation);
 			this.tvStatus.setText(R.string.loading_dot);

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context=".movie.MovieInfoActivity">
+	
+	<data>
+		
+		<import type="com.example.resource.base.ToolbarAction"/>
+		
+		<import type="com.example.az.mybaseproject2.movie.bean.MovieInfoBean"/>
+		
+		<variable
+			name="leftAction"
+			type="ToolbarAction"/>
+		
+		<variable
+			name="title"
+			type="String"/>
+		
+		<variable
+			name="movieInfoBean"
+			type="MovieInfoBean"/>
+	</data>
+	
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@drawable/bg_window"
+		android:orientation="vertical">
+		
+		<include
+			layout="@layout/include_toolbar"
+			app:leftAction="@{leftAction}"
+			app:title="@{title}"/>
+		
+		<cn.shyman.library.refresh.RefreshLayout
+			android:id="@+id/refreshLayout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:refresh_statusMode="show"
+			app:refresh_viewStatus="@layout/refresh_basic_status">
+			
+			<android.support.constraint.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:padding="15dp">
+				
+				<com.example.resource.widget.PictureView
+					android:id="@+id/pictureView"
+					android:layout_width="120dp"
+					android:layout_height="160dp"
+					app:pictureUrl="@{movieInfoBean.images.large}"
+					app:roundedCornerRadius="3dp"
+					app:roundingBorderColor="@color/colorThemeDivider"
+					app:roundingBorderWidth="1px"/>
+				
+				<TextView
+					android:id="@+id/tvTitle"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:layout_marginRight="10dp"
+					android:text="@{title}"
+					app:layout_constraintLeft_toRightOf="@+id/pictureView"
+					app:layout_constraintRight_toRightOf="parent"/>
+				
+				<TextView
+					android:id="@+id/tvYear"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="@{movieInfoBean.year}"
+					app:layout_constraintLeft_toLeftOf="@+id/tvTitle"
+					app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
+				
+				<View
+					style="@style/ViewDividerVertical"
+					android:layout_height="0dp"
+					android:layout_marginLeft="5dp"
+					android:layout_marginTop="3dp"
+					android:layout_marginBottom="3dp"
+					app:layout_constraintBottom_toBottomOf="@+id/tvYear"
+					app:layout_constraintLeft_toRightOf="@+id/tvYear"
+					app:layout_constraintTop_toTopOf="@+id/tvYear"/>
+				
+				<TextView
+					android:id="@+id/tvScore"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dp"
+					android:text="@{movieInfoBean.rating.average}"
+					android:textColor="@color/colorAccent"
+					app:layout_constraintLeft_toRightOf="@+id/tvYear"
+					app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
+				
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@{movieInfoBean.summary}"
+					app:layout_constraintTop_toBottomOf="@+id/pictureView"/>
+			</android.support.constraint.ConstraintLayout>
+		</cn.shyman.library.refresh.RefreshLayout>
+	</LinearLayout>
+</layout>

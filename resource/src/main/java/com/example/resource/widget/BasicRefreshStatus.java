@@ -14,8 +14,10 @@ import android.widget.TextView;
 
 import com.example.resource.R;
 import com.example.resource.network.StatusInfo;
-import com.kycq.library.refresh.RefreshLayout;
-import com.kycq.library.refresh.RefreshStatus;
+import com.example.resource.utils.LogUtils;
+
+import cn.shyman.library.refresh.RefreshLayout;
+import cn.shyman.library.refresh.RefreshStatus;
 
 public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<StatusInfo> {
 	private ImageView ivStatus;
@@ -25,14 +27,14 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 	
 	private AnimationSet animation;
 	
-	private RefreshLayout.OnTryRefreshListener oldOnRefreshListener;
+	private RefreshLayout.OnRefreshListener oldOnRefreshListener;
 	
 	public BasicRefreshStatus(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 	
 	@Override
-	public void initOnTryRefreshListener(RefreshLayout.OnTryRefreshListener onTryRefreshListener) {
+	public void initOnRefreshListener(RefreshLayout.OnRefreshListener onTryRefreshListener) {
 		this.oldOnRefreshListener = onTryRefreshListener;
 	}
 	
@@ -45,7 +47,7 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 			@Override
 			public void onClick(View v) {
 				if (oldOnRefreshListener != null) {
-					oldOnRefreshListener.onRefresh();
+					oldOnRefreshListener.notifyRefresh();
 				}
 			}
 		});
@@ -56,7 +58,7 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 			@Override
 			public void onClick(View v) {
 				if (oldOnRefreshListener != null) {
-					oldOnRefreshListener.onRefresh();
+					oldOnRefreshListener.notifyRefresh();
 				}
 			}
 		});
@@ -109,6 +111,7 @@ public class BasicRefreshStatus extends LinearLayout implements RefreshStatus<St
 	@Override
 	public boolean onRefreshComplete(StatusInfo statusInfo) {
 		this.ivStatus.clearAnimation();
+		LogUtils.d("onRefreshComplete()--statusInfo = "+statusInfo);
 		if (statusInfo == null) {
 			this.ivStatus.setImageResource(R.mipmap.img_network_error);
 			this.ivStatus.setEnabled(false);

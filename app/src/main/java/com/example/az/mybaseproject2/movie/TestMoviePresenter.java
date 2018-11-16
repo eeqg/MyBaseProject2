@@ -1,6 +1,6 @@
 package com.example.az.mybaseproject2.movie;
 
-import com.example.az.mybaseproject2.movie.bean.MovieInfoBean;
+import com.example.az.mybaseproject2.movie.bean.MovieListBean;
 import com.example.resource.base.BasePresenter;
 import com.example.resource.network.ServiceFactory;
 import com.example.resource.network.TaskObserver;
@@ -34,7 +34,7 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 					}
 				})
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new TaskObserver<MovieInfoBean>(basicView) {
+				.subscribeWith(new TaskObserver<MovieListBean>(basicView) {
 					
 					@Override
 					public void taskStart() {
@@ -42,14 +42,14 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 					}
 					
 					@Override
-					public void taskSuccess(MovieInfoBean basicBean) {
+					public void taskSuccess(MovieListBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
 						super.taskSuccess(basicBean);
 						basicView.updateMovieList(basicBean);
 					}
 					
 					@Override
-					public void taskFailure(MovieInfoBean basicBean) {
+					public void taskFailure(MovieListBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskFailure()");
 						super.taskFailure(basicBean);
 						basicView.updateMovieList(basicBean);

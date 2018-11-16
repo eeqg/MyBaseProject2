@@ -2,7 +2,7 @@ package com.example.resource.network;
 
 import com.example.resource.R;
 import com.example.resource.base.BaseApp;
-import com.example.resource.base.BaseContract;
+import com.example.resource.base.SimpleBaseActivity;
 import com.example.resource.utils.LogUtils;
 
 import java.lang.ref.SoftReference;
@@ -11,17 +11,17 @@ import java.lang.ref.SoftReference;
  * Created by wp on 2018/6/27.
  */
 
-public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObserver<T> {
-	private SoftReference<BaseContract.View> basicViewReference;
+public abstract class SimpleTaskObserver<T extends BaseBean> extends AbstractTaskObserver<T> {
+	private SoftReference<SimpleBaseActivity> basicViewReference;
 	
-	protected TaskObserver(BaseContract.View basicView) {
+	protected SimpleTaskObserver(SimpleBaseActivity basicView) {
 		basicViewReference = new SoftReference<>(basicView);
 	}
 	
 	@Override
 	public void taskStart() {
 		LogUtils.d("TaskObserver", "taskStart()--");
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.showLoading();
 		}
@@ -30,7 +30,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	@Override
 	public void taskStop() {
 		LogUtils.d("TaskObserver", "taskStop()--");
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.hideLoading();
 		}
@@ -39,7 +39,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	@Override
 	public void taskSuccess(T basicBean) {
 		LogUtils.d("TaskObserver", "taskSuccess()--");
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			basicView.hideLoading();
 		}
@@ -47,12 +47,12 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	
 	@Override
 	public void taskOther(T basicBean) {
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			if (basicBean.statusInfo.isTokenTimeout()) {
-				basicView.tokenTimeOut();
+				// basicView.tokenTimeOut();
 			} else if (basicBean.statusInfo.isTokenNotFound()) {
-				basicView.tokenNotFound();
+				// basicView.tokenNotFound();
 			} else {
 				BaseApp.toast(basicBean.statusInfo.statusMessage);
 			}
@@ -61,7 +61,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	
 	@Override
 	public void taskFailure(T basicBean) {
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			BaseApp.toast(basicBean.statusInfo.statusMessage);
 		}
@@ -69,7 +69,7 @@ public abstract class TaskObserver<T extends BaseBean> extends AbstractTaskObser
 	
 	@Override
 	public void taskError(Throwable throwable) {
-		BaseContract.View basicView = this.basicViewReference.get();
+		SimpleBaseActivity basicView = this.basicViewReference.get();
 		if (basicView != null) {
 			BaseApp.toast(R.string.network_request_error);
 		}

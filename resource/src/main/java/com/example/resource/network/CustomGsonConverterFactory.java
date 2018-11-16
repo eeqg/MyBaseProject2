@@ -46,14 +46,18 @@ public class CustomGsonConverterFactory extends Converter.Factory {
 	}
 	
 	@Override
-	public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-		return new CustomGsonResponseBodyConverter<>(gson, adapter);
+	public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
+		return super.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
 	}
 	
 	@Override
-	public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
-		return super.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
+	public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+		TypeToken typeToken = TypeToken.get(type);
+		TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
+		if (typeToken.getRawType() == BaseBean.class) {
+		
+		}
+		return new CustomGsonResponseBodyConverter<>(gson, adapter);
 	}
 	
 	class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
@@ -99,7 +103,7 @@ public class CustomGsonConverterFactory extends Converter.Factory {
 		}
 	}
 	
-	private static class BaseBean {
+	private static class BasicBean {
 		@SerializedName("status")
 		int statusCode;
 		@SerializedName("msg")

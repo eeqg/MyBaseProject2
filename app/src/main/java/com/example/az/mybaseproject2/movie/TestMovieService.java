@@ -1,9 +1,11 @@
 package com.example.az.mybaseproject2.movie;
 
 import com.example.az.mybaseproject2.movie.bean.MovieInfoBean;
+import com.example.az.mybaseproject2.movie.bean.MovieListBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -12,11 +14,14 @@ import retrofit2.http.Query;
 
 public interface TestMovieService {
 	/**
-	 *
 	 * @param start
 	 * @param count
 	 * @return
 	 */
 	@GET("top250")
-	Observable<MovieInfoBean> listMovie(@Query("start") int start, @Query("count") int count);
+	Observable<MovieListBean> listMovie(@Query("start") int start, @Query("count") int count);
+	
+	@GET("subject/{movieId}")
+	Observable<MovieInfoBean> getMovieInfo(@Path("movieId") String movieId,
+	                                              @Query("apikey") String apikey);
 }

@@ -9,15 +9,17 @@ import android.view.ViewGroup;
 
 import com.example.az.mybaseproject2.R;
 import com.example.az.mybaseproject2.databinding.ItemMovieListBinding;
-import com.example.az.mybaseproject2.movie.bean.MovieInfoBean;
+import com.example.az.mybaseproject2.movie.bean.MovieItemBean;
+import com.example.az.mybaseproject2.movie.bean.MovieListBean;
 import com.example.resource.base.BaseRecyclerAdapter;
-import com.kycq.library.refresh.RecyclerAdapter;
+
+import cn.shyman.library.refresh.RecyclerAdapter;
 
 /**
  * Created by wp on 2018/4/10.
  */
 
-public class TestMovieListAdapter extends BaseRecyclerAdapter<MovieInfoBean> {
+public class TestMovieListAdapter extends BaseRecyclerAdapter<MovieListBean> {
 	
 	private final LayoutInflater inflater;
 	
@@ -26,25 +28,30 @@ public class TestMovieListAdapter extends BaseRecyclerAdapter<MovieInfoBean> {
 	}
 	
 	@Override
-	public void updateAdapterInfo(@NonNull MovieInfoBean movieInfoBean) {
-		this.mAdapterInfo.movieList.addAll(movieInfoBean.movieList);
+	public void updateAdapterInfo(@NonNull MovieListBean movieInfoBean) {
+		this.adapterInfo.movieList.addAll(movieInfoBean.movieList);
 	}
 	
 	@Override
 	public boolean hasMore() {
-		if (this.mAdapterInfo == null) {
+		if (this.adapterInfo == null) {
 			return false;
 		}
-		return this.mAdapterInfo.total > this.getItemCount();
+		return this.adapterInfo.total > this.getItemCount();
 	}
 	
 	@Override
 	public int getItemCount() {
 		int count = 0;
-		if (this.mAdapterInfo != null && this.mAdapterInfo.movieList != null) {
-			count = this.mAdapterInfo.movieList.size();
+		if (this.adapterInfo != null && this.adapterInfo.movieList != null) {
+			count = this.adapterInfo.movieList.size();
 		}
 		return count;
+	}
+	
+	@Override
+	public MovieItemBean getItem(int position) {
+		return this.adapterInfo.movieList.get(position);
 	}
 	
 	@Override
@@ -61,7 +68,7 @@ public class TestMovieListAdapter extends BaseRecyclerAdapter<MovieInfoBean> {
 			@Override
 			protected void onBindView(int position) {
 				this.dataBinding.setIndex(String.valueOf(position + 1));
-				this.dataBinding.setMovieItemBean(mAdapterInfo.movieList.get(position));
+				this.dataBinding.setMovieItemBean(adapterInfo.movieList.get(position));
 				this.dataBinding.executePendingBindings();
 			}
 		};

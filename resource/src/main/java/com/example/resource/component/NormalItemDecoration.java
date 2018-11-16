@@ -9,13 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.resource.R;
-import com.kycq.library.refresh.RecyclerAdapter.ItemDecoration;
+
+import cn.shyman.library.refresh.RecyclerAdapter;
 
 /**
  * Created by wp on 2018/4/11.
  */
 
-public class NormalItemDecoration extends ItemDecoration {
+public class NormalItemDecoration extends RecyclerAdapter.ItemDecoration {
 	private Paint dividerPaint;
 	private int dividerSize;
 	

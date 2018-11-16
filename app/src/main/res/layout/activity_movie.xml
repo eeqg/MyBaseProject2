@@ -23,11 +23,11 @@
 		         app:leftAction="@{leftAction}"
 		         app:title="@{@string/title_movie}"/>
 		
-		<com.kycq.library.refresh.RefreshLayout
+		<cn.shyman.library.refresh.RefreshLayout
 			android:id="@+id/refreshLayout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			app:refresh_statusMode="hide"
+			app:refresh_statusMode="show"
 			app:refresh_viewHeader="@layout/refresh_basic_header"
 			app:refresh_viewStatus="@layout/refresh_basic_status">
 			
@@ -35,6 +35,6 @@
 				android:id="@+id/recyclerView"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"/>
-		</com.kycq.library.refresh.RefreshLayout>
+		</cn.shyman.library.refresh.RefreshLayout>
 	</LinearLayout>
 </layout>

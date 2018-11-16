@@ -42,6 +42,8 @@
 		</activity>
 		<activity android:name=".movie.MovieActivity">
 		</activity>
+		<activity android:name=".movie.MovieInfoActivity">
+		</activity>
 	</application>
 
 </manifest>
