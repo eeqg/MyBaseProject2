@@ -10,11 +10,13 @@ import com.example.resource.base.BaseConst;
 import com.example.resource.base.SimpleBaseSwipeBackActivity;
 import com.example.resource.network.ServiceFactory;
 import com.example.resource.network.SimpleTaskObserver;
+import com.example.resource.network.StatusInfo;
 import com.example.resource.utils.LogUtils;
 
 import cn.shyman.library.refresh.OnTaskListener;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
@@ -57,34 +59,54 @@ public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
 				.getMovieInfo(movieId, "0b2bdeda43b5688921839c8ecb20399b")
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new SimpleTaskObserver<MovieInfoBean>(MovieInfoActivity.this) {
+				// .subscribeWith(new SimpleTaskObserver<MovieInfoBean>(MovieInfoActivity.this) {
+				// 	@Override
+				// 	public void taskStart() {
+				// 		// super.taskStart();
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskSuccess(MovieInfoBean basicBean) {
+				// 		LogUtils.d("TestMoviePresenter", "taskSuccess()");
+				// 		super.taskSuccess(basicBean);
+				// 		dataBinding.refreshLayout.swipeComplete(basicBean.statusInfo);
+				// 		dataBinding.setTitle(basicBean.title);
+				// 		dataBinding.setMovieInfoBean(basicBean);
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskFailure(MovieInfoBean basicBean) {
+				// 		LogUtils.d("TestMoviePresenter", "taskFailure()");
+				// 		super.taskFailure(basicBean);
+				// 		dataBinding.refreshLayout.swipeComplete(basicBean.statusInfo);
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskError(Throwable throwable) {
+				// 		LogUtils.d("TestMoviePresenter", "taskError()");
+				// 		super.taskError(throwable);
+				// 		dataBinding.refreshLayout.swipeComplete(null);
+				// 		dataBinding.setMovieInfoBean(null);
+				// 	}
+				// });
+				.subscribeWith(new DisposableObserver<MovieInfoBean>() {
 					@Override
-					public void taskStart() {
-						// super.taskStart();
-					}
-					
-					@Override
-					public void taskSuccess(MovieInfoBean basicBean) {
+					public void onNext(MovieInfoBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
-						super.taskSuccess(basicBean);
-						dataBinding.refreshLayout.swipeComplete(basicBean.statusInfo);
+						dataBinding.refreshLayout.swipeComplete(new StatusInfo());
 						dataBinding.setTitle(basicBean.title);
 						dataBinding.setMovieInfoBean(basicBean);
 					}
 					
 					@Override
-					public void taskFailure(MovieInfoBean basicBean) {
-						LogUtils.d("TestMoviePresenter", "taskFailure()");
-						super.taskFailure(basicBean);
-						dataBinding.refreshLayout.swipeComplete(basicBean.statusInfo);
+					public void onError(Throwable e) {
+						dataBinding.refreshLayout.swipeComplete(null);
+						dataBinding.setMovieInfoBean(null);
 					}
 					
 					@Override
-					public void taskError(Throwable throwable) {
-						LogUtils.d("TestMoviePresenter", "taskError()");
-						super.taskError(throwable);
-						dataBinding.refreshLayout.swipeComplete(null);
-						dataBinding.setMovieInfoBean(null);
+					public void onComplete() {
+					
 					}
 				});
 	}

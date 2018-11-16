@@ -11,6 +11,7 @@ import com.example.az.mybaseproject2.movie.bean.MovieListBean;
 import com.example.resource.base.BaseConst;
 import com.example.resource.base.BaseSwipeBackActivity;
 import com.example.resource.component.NormalItemDecoration;
+import com.example.resource.network.StatusInfo;
 import com.example.resource.utils.LaunchUtil;
 import com.example.resource.utils.LogUtils;
 import com.example.resource.utils.StatusBarUtil;
@@ -83,5 +84,6 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 	public void updateMovieList(MovieListBean movieInfoBean) {
 		LogUtils.d("movieInfoBean=" + movieInfoBean);
 		this.testMovieListAdapter.swipeResult(movieInfoBean);
+		this.testMovieListAdapter.swipeStatus(new StatusInfo());
 	}
 }

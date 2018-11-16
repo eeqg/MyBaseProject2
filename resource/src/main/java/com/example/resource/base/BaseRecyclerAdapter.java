@@ -66,8 +66,10 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter {
 	
 	public void swipeResult(AdapterInfo adapterInfo) {
 		this.completeAdapterInfo = adapterInfo;
-		StatusInfo statusInfo = adapterInfo instanceof BaseBean ? ((BaseBean) adapterInfo).statusInfo : null;
-		swipeStatus(statusInfo);
+		if (adapterInfo instanceof BaseBean) {
+			StatusInfo statusInfo = ((BaseBean) adapterInfo).statusInfo;
+			swipeStatus(statusInfo);
+		}
 	}
 	
 	public void swipeStatus(StatusInfo statusInfo) {

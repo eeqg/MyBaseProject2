@@ -9,6 +9,7 @@ import com.example.resource.utils.LogUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -34,32 +35,49 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 					}
 				})
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new TaskObserver<MovieListBean>(basicView) {
-					
+				// .subscribeWith(new TaskObserver<MovieListBean>(basicView) {
+				//
+				// 	@Override
+				// 	public void taskStart() {
+				// 		super.taskStart();
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskSuccess(MovieListBean basicBean) {
+				// 		LogUtils.d("TestMoviePresenter", "taskSuccess()");
+				// 		super.taskSuccess(basicBean);
+				// 		basicView.updateMovieList(basicBean);
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskFailure(MovieListBean basicBean) {
+				// 		LogUtils.d("TestMoviePresenter", "taskFailure()");
+				// 		super.taskFailure(basicBean);
+				// 		basicView.updateMovieList(basicBean);
+				// 	}
+				//
+				// 	@Override
+				// 	public void taskError(Throwable throwable) {
+				// 		LogUtils.d("TestMoviePresenter", "taskError()");
+				// 		super.taskError(throwable);
+				// 		basicView.updateMovieList(null);
+				// 	}
+				// });
+				.subscribeWith(new DisposableObserver<MovieListBean>() {
 					@Override
-					public void taskStart() {
-						super.taskStart();
-					}
-					
-					@Override
-					public void taskSuccess(MovieListBean basicBean) {
+					public void onNext(MovieListBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
-						super.taskSuccess(basicBean);
 						basicView.updateMovieList(basicBean);
 					}
 					
 					@Override
-					public void taskFailure(MovieListBean basicBean) {
-						LogUtils.d("TestMoviePresenter", "taskFailure()");
-						super.taskFailure(basicBean);
-						basicView.updateMovieList(basicBean);
-					}
-					
-					@Override
-					public void taskError(Throwable throwable) {
-						LogUtils.d("TestMoviePresenter", "taskError()");
-						super.taskError(throwable);
+					public void onError(Throwable e) {
 						basicView.updateMovieList(null);
+					}
+					
+					@Override
+					public void onComplete() {
+					
 					}
 				});
 		LogUtils.d("TestMoviePresenter", "doOnSubscribe()-2222-disposable=" + d);

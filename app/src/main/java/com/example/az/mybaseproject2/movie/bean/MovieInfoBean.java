@@ -1,13 +1,15 @@
 package com.example.az.mybaseproject2.movie.bean;
 
 import com.example.resource.network.BaseBean;
+import com.example.resource.network.StatusInfo;
 
 import java.util.List;
 
 /**
  * Created by wp on 2018/11/15.
  */
-public class MovieInfoBean extends BaseBean {
+public class MovieInfoBean {
+	public StatusInfo statusInfo = new StatusInfo();
 	public String title;
 	public Images images;
 	public String year;
@@ -23,7 +25,7 @@ public class MovieInfoBean extends BaseBean {
 		public String large;
 	}
 	
-	public class RatingInfoBean{
+	public class RatingInfoBean {
 		public String average;
 	}
 	
