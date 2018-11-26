@@ -29,13 +29,14 @@ task clean(type: Delete) {
 
 ext {
 	// Sdk and tools
+	compileSdkVersion = 28
+	buildToolsVersion = '28.0.0'
 	minSdkVersion = 15
-	targetSdkVersion = 26
-	compileSdkVersion = 26
-	buildToolsVersion = '26.0.2'
+	targetSdkVersion = 28
+	appTargetSdkVersion = 28
 	
 	// App dependencies
-	supportLibraryVersion = '26.1.0'
+	supportLibraryVersion = '28.0.0-alpha3'
 	
 	rxjavaVersion = '2.1.3'
 	rxandroidVersion = '2.0.1'
@@ -47,4 +48,7 @@ ext {
 	libFresco = 'com.facebook.fresco:fresco:1.4.0'
 	libSwipeback = 'me.imid.swipebacklayout.lib:library:1.1.0'
 	libEventBus = 'org.greenrobot:eventbus:3.0.0'
+	
+	//zxing
+	libZXingCore = 'com.google.zxing:core:3.3.2'
 }

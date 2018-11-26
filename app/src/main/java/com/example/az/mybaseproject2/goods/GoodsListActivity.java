@@ -21,6 +21,7 @@ import cn.shyman.library.refresh.RecyclerAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 	private ActivityGoodsListBinding dataBinding;
@@ -30,6 +31,8 @@ public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_goods_list);
+		
+		// getSwipeBackLayout().setEdgeTrackingEnabled(0);
 		
 		observerContent();
 		
@@ -75,7 +78,7 @@ public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 		//https://app.52momopig.com/index/index/queryGoodsRecommendByPosition?token=8899daaa4c8e50882bbfa48a68901706&page=%7B%22pageIndex%22%3A1%2C%22pageSize%22%3A20%7D&positionCode=syhybd
 		String pageInfo = String.format(String.format("{\"pageIndex\":%s,\"pageSize\":%s}", currentPage, 20));
 		return ServiceFactory.createService("https://app.52momopig.com/", GoodsService.class)
-				.listGoods("8899daaa4c8e50882bbfa48a68901706", "syhybd", pageInfo)
+				.listGoods("298d7053942f315a2dfaae0ae42fc505", "syhybd", pageInfo)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SimpleTaskObserver<GoodsListBean>(GoodsListActivity.this) {
