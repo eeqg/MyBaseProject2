@@ -84,6 +84,6 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 	public void updateMovieList(MovieListBean movieInfoBean) {
 		LogUtils.d("movieInfoBean=" + movieInfoBean);
 		this.testMovieListAdapter.swipeResult(movieInfoBean);
-		this.testMovieListAdapter.swipeStatus(new StatusInfo());
+		this.testMovieListAdapter.swipeStatus(new StatusInfo(StatusInfo.STATUS_SUCCESS));
 	}
 }

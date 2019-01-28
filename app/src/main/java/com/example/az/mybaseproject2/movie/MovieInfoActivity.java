@@ -93,7 +93,7 @@ public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
 					@Override
 					public void onNext(MovieInfoBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
-						dataBinding.refreshLayout.swipeComplete(new StatusInfo());
+						dataBinding.refreshLayout.swipeComplete(new StatusInfo(StatusInfo.STATUS_SUCCESS));
 						dataBinding.setTitle(basicBean.title);
 						dataBinding.setMovieInfoBean(basicBean);
 					}

@@ -40,6 +40,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			app:refresh_statusMode="show"
+			app:refresh_viewHeader="@layout/refresh_basic_header"
 			app:refresh_viewStatus="@layout/refresh_basic_status">
 			
 			<android.support.constraint.ConstraintLayout

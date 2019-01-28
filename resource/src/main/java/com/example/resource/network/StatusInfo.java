@@ -2,7 +2,7 @@ package com.example.resource.network;
 
 public class StatusInfo {
 	/** 成功 */
-	public static final int STATUS_SUCCESS = 0;
+	public static final int STATUS_SUCCESS = 200;
 	/** Token超时 */
 	public static final int STATUS_TOKEN_TIMEOUT = 1004;
 	/** Token未设置 */

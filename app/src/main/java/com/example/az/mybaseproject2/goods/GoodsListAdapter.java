@@ -9,16 +9,17 @@ import android.view.ViewGroup;
 
 import com.example.az.mybaseproject2.R;
 import com.example.az.mybaseproject2.databinding.ItemGoodsListBinding;
-import com.example.az.mybaseproject2.databinding.ItemMovieListBinding;
 import com.example.az.mybaseproject2.goods.bean.GoodsItemBean;
-import com.example.az.mybaseproject2.goods.bean.GoodsListBean;
 import com.example.resource.base.BaseRecyclerAdapter;
+import com.example.resource.utils.LogUtils;
+
+import java.util.List;
 
 /**
  * Created by wp on 2018/4/10.
  */
 
-public class GoodsListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
+public class GoodsListAdapter extends BaseRecyclerAdapter<List<GoodsItemBean>> {
 	
 	private final LayoutInflater inflater;
 	
@@ -27,30 +28,24 @@ public class GoodsListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
 	}
 	
 	@Override
-	public void updateAdapterInfo(@NonNull GoodsListBean goodsListBean) {
-		this.adapterInfo.goodsRecommendResponseList.addAll(goodsListBean.goodsRecommendResponseList);
+	protected void updateAdapterInfo(@NonNull List<GoodsItemBean> goodsItemBeans) {
+		// this.adapterInfo.addAll(goodsItemBeans);
+		this.adapterInfo = goodsItemBeans;
 	}
 	
 	@Override
 	public boolean hasMore() {
-		if (this.adapterInfo == null) {
-			return false;
-		}
-		return 100 > this.getItemCount();
+		return false;
 	}
 	
 	@Override
 	public int getItemCount() {
-		int count = 0;
-		if (this.adapterInfo != null && this.adapterInfo.goodsRecommendResponseList != null) {
-			count = this.adapterInfo.goodsRecommendResponseList.size();
-		}
-		return count;
+		return this.adapterInfo != null ? this.adapterInfo.size() : 0;
 	}
 	
 	@Override
 	public GoodsItemBean getItem(int position) {
-		return this.adapterInfo.goodsRecommendResponseList.get(position);
+		return this.adapterInfo.get(position);
 	}
 	
 	@Override
@@ -66,6 +61,7 @@ public class GoodsListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
 			
 			@Override
 			protected void onBindView(int position) {
+				LogUtils.d("-----" + getItem(position));
 				this.dataBinding.setIndex(String.valueOf(position + 1));
 				this.dataBinding.setGoodsItemBean(getItem(position));
 				this.dataBinding.executePendingBindings();

@@ -1,15 +1,12 @@
 package com.example.az.mybaseproject2.goods;
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.example.az.mybaseproject2.R;
 import com.example.az.mybaseproject2.databinding.ActivityGoodsListBinding;
 import com.example.az.mybaseproject2.goods.bean.GoodsListBean;
-import com.example.az.mybaseproject2.movie.bean.MovieItemBean;
 import com.example.resource.base.SimpleBaseSwipeBackActivity;
 import com.example.resource.component.NormalItemDecoration;
 import com.example.resource.network.ServiceFactory;
@@ -21,11 +18,10 @@ import cn.shyman.library.refresh.RecyclerAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import me.imid.swipebacklayout.lib.SwipeBackLayout;
 
 public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 	private ActivityGoodsListBinding dataBinding;
-	private GoodsListAdapter goodsListAdapter;
+	private GoodsFloorListAdapter goodsListAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +39,7 @@ public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 		this.dataBinding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		this.dataBinding.recyclerView.addItemDecoration(new NormalItemDecoration(this));
 		
-		this.goodsListAdapter = new GoodsListAdapter(this);
+		this.goodsListAdapter = new GoodsFloorListAdapter(this);
 		this.goodsListAdapter.setRefreshLayout(this.dataBinding.refreshLayout);
 		this.goodsListAdapter.setRecyclerView(this.dataBinding.recyclerView);
 		this.goodsListAdapter.setOnTaskListener(new OnTaskListener<Disposable>() {
@@ -77,8 +73,8 @@ public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 	private Disposable listGoods(int currentPage) {
 		//https://app.52momopig.com/index/index/queryGoodsRecommendByPosition?token=8899daaa4c8e50882bbfa48a68901706&page=%7B%22pageIndex%22%3A1%2C%22pageSize%22%3A20%7D&positionCode=syhybd
 		String pageInfo = String.format(String.format("{\"pageIndex\":%s,\"pageSize\":%s}", currentPage, 20));
-		return ServiceFactory.createService("https://app.52momopig.com/", GoodsService.class)
-				.listGoods("298d7053942f315a2dfaae0ae42fc505", "syhybd", pageInfo)
+		return ServiceFactory.createService("https://app.mmzlswg.com/", GoodsService.class)
+				.listGoods("b680c5105e0b144ab8e5611bdffc7d05", "588189232397012992", pageInfo)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SimpleTaskObserver<GoodsListBean>(GoodsListActivity.this) {

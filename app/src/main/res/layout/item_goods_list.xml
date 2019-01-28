@@ -62,14 +62,14 @@
 					android:textSize="@dimen/dimenTextPrimary"
 					tools:text="movie"/>
 				
-				<TextView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="8dp"
-					android:text="@{111}"
-					android:textColor="@color/colorTextAssisted"
-					android:textSize="@dimen/dimenTextAssisted"
-					tools:text="1997"/>
+				<!--<TextView-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_marginTop="8dp"-->
+					<!--android:text="@{111}"-->
+					<!--android:textColor="@color/colorTextAssisted"-->
+					<!--android:textSize="@dimen/dimenTextAssisted"-->
+					<!--tools:text="1997"/>-->
 			</LinearLayout>
 			
 			<TextView
