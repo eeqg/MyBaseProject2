@@ -29,6 +29,7 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter {
 	 * 重置数据信息并刷新
 	 */
 	public final void forceRefresh() {
+		this.currentPage = this.initPage;
 		resetAdapterInfo(null);
 		swipeRefresh();
 	}
@@ -49,6 +50,13 @@ public abstract class BaseRecyclerAdapter<AdapterInfo> extends RecyclerAdapter {
 	 */
 	public final int getCurrentPage() {
 		return this.currentPage;
+	}
+	
+	/**
+	 * 默认请求数
+	 */
+	public final int getDefaultPageSize() {
+		return 20;
 	}
 	
 	@Override

@@ -72,9 +72,9 @@ public class GoodsListActivity extends SimpleBaseSwipeBackActivity {
 	
 	private Disposable listGoods(int currentPage) {
 		//https://app.52momopig.com/index/index/queryGoodsRecommendByPosition?token=8899daaa4c8e50882bbfa48a68901706&page=%7B%22pageIndex%22%3A1%2C%22pageSize%22%3A20%7D&positionCode=syhybd
-		String pageInfo = String.format(String.format("{\"pageIndex\":%s,\"pageSize\":%s}", currentPage, 20));
-		return ServiceFactory.createService("https://app.mmzlswg.com/", GoodsService.class)
-				.listGoods("b680c5105e0b144ab8e5611bdffc7d05", "588189232397012992", pageInfo)
+		String pageInfo = String.format(String.format("{\"pageIndex\":%s,\"pageSize\":%s}", currentPage, goodsListAdapter.getDefaultPageSize()));
+		return ServiceFactory.createService("https://app.idouyao.com/", GoodsService.class)
+				.listGoods("68d1e22a4549c907cd0e73903e558566", "588189232397012992", pageInfo)
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribeWith(new SimpleTaskObserver<GoodsListBean>(GoodsListActivity.this) {

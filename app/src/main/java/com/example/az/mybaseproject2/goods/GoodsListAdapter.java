@@ -61,7 +61,7 @@ public class GoodsListAdapter extends BaseRecyclerAdapter<List<GoodsItemBean>> {
 			
 			@Override
 			protected void onBindView(int position) {
-				LogUtils.d("-----" + getItem(position));
+				// LogUtils.d("-----" + getItem(position));
 				this.dataBinding.setIndex(String.valueOf(position + 1));
 				this.dataBinding.setGoodsItemBean(getItem(position));
 				this.dataBinding.executePendingBindings();

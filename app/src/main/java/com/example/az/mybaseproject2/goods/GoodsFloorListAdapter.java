@@ -22,8 +22,9 @@ import com.example.resource.widget.PictureView;
  */
 public class GoodsFloorListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
 	private final LayoutInflater inflater;
+	private boolean hasMore = true;
 	
-	public GoodsFloorListAdapter(Context context) {
+	GoodsFloorListAdapter(Context context) {
 		this.inflater = LayoutInflater.from(context);
 	}
 	
@@ -64,7 +65,7 @@ public class GoodsFloorListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
 				PictureView.loadPicture(dataBinding.pictureView, getItem(position).imgUrl);
 				dataBinding.tvTitle.setText(getItem(position).homeName);
 				// dataBinding.setGoodsInfoItemBean(getItem(position));
-				LogUtils.d("-----" + getItem(position).goodsRecommendResponseList.size());
+				// LogUtils.d("-----" + getItem(position).goodsRecommendResponseList.size());
 				goodsListAdapter.swipeResult(getItem(position).goodsRecommendResponseList);
 				goodsListAdapter.swipeStatus(new StatusInfo(StatusInfo.STATUS_SUCCESS));
 			}
@@ -74,10 +75,14 @@ public class GoodsFloorListAdapter extends BaseRecyclerAdapter<GoodsListBean> {
 	@Override
 	protected void updateAdapterInfo(@NonNull GoodsListBean goodsListBean) {
 		this.adapterInfo.list.addAll(goodsListBean.list);
+		this.hasMore = goodsListBean.list != null && goodsListBean.list.size() == getDefaultPageSize();
+		LogUtils.d("-----size: " + goodsListBean.list.size());
+		LogUtils.d("-----hasMore: " + hasMore);
 	}
 	
 	@Override
 	public boolean hasMore() {
-		return this.adapterInfo != null && getCurrentPage() <= this.adapterInfo.pageCount;
+		// return this.adapterInfo != null && getCurrentPage() <= this.adapterInfo.pageCount;
+		return hasMore;
 	}
 }

@@ -57,7 +57,7 @@ public class MovieActivity extends BaseSwipeBackActivity<TestMovieContract.Prese
 			public Disposable onTask() {
 				int currentPage = testMovieListAdapter.getCurrentPage();
 				// LogUtils.d("currentPage=" + currentPage);
-				int count = 20;
+				int count = testMovieListAdapter.getDefaultPageSize();
 				int start = (currentPage - 1) * count;
 				return presenter.listMovie(start, count);
 			}
