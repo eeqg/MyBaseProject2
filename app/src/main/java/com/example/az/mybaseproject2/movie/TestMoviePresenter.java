@@ -65,6 +65,11 @@ class TestMoviePresenter extends BasePresenter<TestMovieContract.View>
 				// });
 				.subscribeWith(new DisposableObserver<MovieListBean>() {
 					@Override
+					protected void onStart() {
+						super.onStart();
+					}
+					
+					@Override
 					public void onNext(MovieListBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
 						basicView.updateMovieList(basicBean);

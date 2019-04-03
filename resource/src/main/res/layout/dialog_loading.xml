@@ -9,7 +9,7 @@
 		android:gravity="center"
 		android:orientation="vertical"
 		android:padding="16dp"
-		tools:background="@drawable/bg_loading_dialog"
+		tools:background="@color/base_transparent"
 		tools:ignore="UseCompoundDrawables">
 		
 		<ImageView

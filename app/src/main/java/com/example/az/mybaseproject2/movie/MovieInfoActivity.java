@@ -91,6 +91,11 @@ public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
 				// });
 				.subscribeWith(new DisposableObserver<MovieInfoBean>() {
 					@Override
+					protected void onStart() {
+						showLoading();
+					}
+					
+					@Override
 					public void onNext(MovieInfoBean basicBean) {
 						LogUtils.d("TestMoviePresenter", "taskSuccess()");
 						dataBinding.refreshLayout.swipeComplete(new StatusInfo(StatusInfo.STATUS_SUCCESS));
@@ -106,7 +111,7 @@ public class MovieInfoActivity extends SimpleBaseSwipeBackActivity {
 					
 					@Override
 					public void onComplete() {
-					
+						hideLoading();
 					}
 				});
 	}
